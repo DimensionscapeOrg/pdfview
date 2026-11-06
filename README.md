@@ -57,6 +57,10 @@ tar -xzf pdfjs-dist-4.10.38.tgz -C <dir>
 haxe -cp build --run PdfJsBundle <dir>/package
 ```
 
+## Releasing
+
+`powershell -File build/release.ps1` packs `bin/pdfview-<version>.zip` from the files git tracks at HEAD and prints the `haxelib submit` command for it; `-Submit` runs it too.
+
 ## Tests
 
 From the repository root, with a project-local repository holding StageWebView, hxcpp and utest:
