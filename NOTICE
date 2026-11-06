@@ -1,0 +1,9 @@
+pdfview
+Copyright Dimensionscape
+
+This product includes third-party code under its own license:
+
+assets/pdfjs/pdf.lib.js, assets/pdfjs/pdf.worker.js
+	PDF.js 4.10.38 (pdfjs-dist), https://github.com/mozilla/pdf.js
+	Copyright Mozilla Foundation
+	Apache License 2.0, in assets/pdfjs/LICENSE.

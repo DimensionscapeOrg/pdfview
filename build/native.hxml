@@ -1,0 +1,10 @@
+# A real PDF in a real, hidden webview (see test/src/NativeMain.hx). Run from the
+# repository root, then run bin/native/NativeMain from there too. Add -D HXCPP_M64 on
+# 64-bit Windows, where WebView2 is 64-bit.
+-cp src
+-cp test/src
+-lib StageWebView
+-D pdfview_pdfjs
+--macro pdfview._internal.Embed.include()
+-main NativeMain
+--cpp bin/native

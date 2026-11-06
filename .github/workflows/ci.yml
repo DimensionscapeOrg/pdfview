@@ -1,0 +1,63 @@
+name: CI
+
+# Runs the unit tests, then shows a two-page PDF in a real hidden webview with the bundled
+# PDF.js and with AUTO, on Windows (WebView2) and Linux (WebKitGTK).
+#
+# Dependencies are exact lib.haxe.org releases in a project-local haxelib repository.
+# HAXELIB_PATH points hxcpp at it too: hxcpp resolves StageWebView's native build files
+# from its own working directory.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+env:
+  HAXE_VERSION: 4.3.7
+
+jobs:
+  windows:
+    runs-on: windows-2022
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: krdlab/setup-haxe@v1
+        with:
+          haxe-version: ${{ env.HAXE_VERSION }}
+      - name: Install pinned haxelibs
+        shell: bash
+        run: .github/scripts/install-haxelibs.sh
+      - name: Unit tests (interp)
+        run: haxe build/tests.hxml
+      - name: Native test (hxcpp, WebView2)
+        shell: bash
+        timeout-minutes: 10
+        run: |
+          export HAXELIB_PATH="$GITHUB_WORKSPACE/.haxelib"
+          haxe build/native.hxml -D HXCPP_M64
+          bin/native/NativeMain.exe bundled
+          bin/native/NativeMain.exe auto
+
+  linux:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: krdlab/setup-haxe@v1
+        with:
+          haxe-version: ${{ env.HAXE_VERSION }}
+      - name: Install GTK, WebKitGTK and Xvfb
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pkg-config libgtk-3-dev libwebkit2gtk-4.1-dev xvfb xauth libgl1-mesa-dri libglu1-mesa
+      - name: Install pinned haxelibs
+        run: .github/scripts/install-haxelibs.sh
+      - name: Unit tests (interp)
+        run: haxe build/tests.hxml
+      - name: Native test (hxcpp, WebKitGTK)
+        timeout-minutes: 10
+        run: |
+          export HAXELIB_PATH="$GITHUB_WORKSPACE/.haxelib"
+          haxe build/native.hxml -D HXCPP_M64
+          xvfb-run -a -s "-screen 0 1280x1024x24" bin/native/NativeMain bundled
+          xvfb-run -a -s "-screen 0 1280x1024x24" bin/native/NativeMain auto

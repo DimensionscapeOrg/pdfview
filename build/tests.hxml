@@ -1,0 +1,10 @@
+# The unit tests, in the interpreter, with the bundled viewer compiled in. Run from the
+# repository root.
+-cp src
+-cp test/src
+-lib utest
+-lib StageWebView
+-D pdfview_pdfjs
+--macro pdfview._internal.Embed.include()
+-main TestMain
+--interp
