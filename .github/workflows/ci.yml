@@ -29,6 +29,8 @@ jobs:
         run: .github/scripts/install-haxelibs.sh
       - name: Unit tests (interp)
         run: haxe build/tests.hxml
+      - name: Showing a PDF compiles in no webview
+        run: haxe build/no-webview.hxml
       - name: Native test (hxcpp, WebView2)
         shell: bash
         timeout-minutes: 10
@@ -54,6 +56,8 @@ jobs:
         run: .github/scripts/install-haxelibs.sh
       - name: Unit tests (interp)
         run: haxe build/tests.hxml
+      - name: Showing a PDF compiles in no webview
+        run: haxe build/no-webview.hxml
       - name: Native test (hxcpp, WebKitGTK)
         timeout-minutes: 10
         run: |

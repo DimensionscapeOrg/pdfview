@@ -15,7 +15,7 @@ class TestPdfView extends utest.Test
 	{
 		loaded = [];
 		shown = [];
-		target = PdfTarget.of({}, url -> loaded.push(url), html -> shown.push(html));
+		target = {load: url -> loaded.push(url), loadHTML: html -> shown.push(html)};
 		file = haxe.io.Path.join([Sys.getCwd(), "bin", "two pages & more.pdf"]);
 		if (!sys.FileSystem.exists(haxe.io.Path.directory(file)))
 		{
@@ -28,6 +28,14 @@ class TestPdfView extends utest.Test
 	{
 		PdfView.release(target);
 		sys.FileSystem.deleteFile(file);
+	}
+
+	function testAnyObjectWithTheTwoCallsIsATarget()
+	{
+		// A class instance, as StageWebView's and Lime's WebView are: matched by its two calls.
+		final view = new FakeView();
+		PdfView.show(view, file, NATIVE);
+		Assert.same([PdfView.fileUrl(sys.FileSystem.absolutePath(file))], view.loaded);
 	}
 
 	function testAFileUrlEncodesEachSegmentAndKeepsTheDrive()
@@ -103,4 +111,18 @@ class TestPdfView extends utest.Test
 			Assert.notEquals(PdfView.fileUrl(sys.FileSystem.absolutePath(file)), loaded[0]);
 		}
 	}
+}
+
+private class FakeView
+{
+	public var loaded:Array<String> = [];
+
+	public function new() {}
+
+	public function load(url:String):Void
+	{
+		loaded.push(url);
+	}
+
+	public function loadHTML(html:String):Void {}
 }

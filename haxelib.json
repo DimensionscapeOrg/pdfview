@@ -2,12 +2,23 @@
   "name": "pdfview",
   "url": "https://github.com/DimensionscapeOrg/pdfview",
   "license": "Apache",
-  "tags": ["pdf", "viewer", "webview", "stagewebview", "pdfjs", "openfl", "cpp"],
-  "description": "Shows PDFs in a StageWebView webview on every platform it supports: the webview's own viewer on Windows, macOS and iOS, and a bundled PDF.js on Linux and Android, where the webview has none.",
-  "version": "0.1.0",
+  "tags": [
+    "pdf",
+    "viewer",
+    "webview",
+    "stagewebview",
+    "lime",
+    "pdfjs",
+    "openfl",
+    "cpp"
+  ],
+  "description": "Shows PDFs in a webview on every platform StageWebView supports: StageWebView's own, Lime's lime.ui.WebView or OpenFL's StageWebView, with the webview's own viewer on Windows, macOS and iOS and a bundled PDF.js on Linux and Android, where the webview has none.",
+  "version": "0.2.0",
   "classPath": "src",
-  "releasenote": "First release: PdfView.show() for webview.WebView and openfl.media.StageWebView, with PDF.js 4.10.38 bundled for Linux and Android.",
-  "contributors": ["Dimensionscape"],
+  "releasenote": "PdfTarget is a structure, anything with load and loadHTML, so lime.ui.WebView works as it stands and showing a PDF no longer compiles StageWebView's own backend into a program that does not use it (on Linux it linked WebKitGTK). PdfTarget.of is gone: pass the webview itself. OpenFL's facade goes through pdfview.openfl.StageWebViewTarget.",
+  "contributors": [
+    "Dimensionscape"
+  ],
   "dependencies": {
     "StageWebView": ""
   }

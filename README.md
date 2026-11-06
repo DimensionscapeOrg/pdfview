@@ -1,6 +1,6 @@
 # pdfview
 
-Shows PDFs in a [StageWebView](https://github.com/DimensionscapeOrg/stagewebview) webview on every platform StageWebView supports.
+Shows PDFs in a webview on every platform [StageWebView](https://github.com/DimensionscapeOrg/stagewebview) supports: StageWebView's own `WebView`, Lime's `lime.ui.WebView`, which draws with StageWebView's engines, or OpenFL's `StageWebView` facade.
 
 WebView2 and WKWebView display a PDF themselves. Android WebView has no PDF viewer, and WebKitGTK has one only when the distribution built it in, so on Linux and Android pdfview renders the file with a bundled [PDF.js](https://github.com/mozilla/pdf.js) instead.
 
@@ -29,7 +29,7 @@ import pdfview.PdfView;
 PdfView.show(webView, "report.pdf");
 ```
 
-`webView` is a `webview.WebView`, or with OpenFL an `openfl.media.StageWebView`. A host with a webview of its own can pass `PdfTarget.of(view, load, loadHTML)` instead.
+`webView` is anything with `load(url)` and `loadHTML(html)`: a `webview.WebView`, a `lime.ui.WebView`, or a webview of a host's own. `PdfTarget` is that structure and names no webview class, so showing a PDF compiles in no webview a program does not use; above all, a program on Lime's `WebView` does not build StageWebView's own backend, which on Linux links WebKitGTK. OpenFL's `openfl.media.StageWebView` calls the two `loadURL` and `loadString`, so wrap it once in a `pdfview.openfl.StageWebViewTarget` and pass the wrapper.
 
 `show()` takes a third argument, a `PdfViewer`:
 
@@ -70,6 +70,7 @@ From the repository root, with a project-local repository holding StageWebView, 
 | `haxe build/tests.hxml` | which viewer `show()` picks, the file URLs it builds, the page it writes and `release()`, with no webview |
 | `haxe build/native.hxml` then `bin/native/NativeMain bundled` | a two-page PDF printed by the webview, shown with the bundled viewer in a real hidden webview, every page drawn |
 | `bin/native/NativeMain auto` | the same with `AUTO`: the webview's own viewer where there is one |
+| `haxe build/no-webview.hxml` | a program that shows a PDF and names no webview compiles in no StageWebView or OpenFL module |
 
 On Windows add `-D HXCPP_M64` to the native build. On Linux the native test needs a display (`xvfb-run` works) and GTK 3 and WebKitGTK 4.1 development files. hxcpp resolves StageWebView's native build files from its own working directory, so set `HAXELIB_PATH` to the project-local repository when building, or it may take them from somewhere else.
 

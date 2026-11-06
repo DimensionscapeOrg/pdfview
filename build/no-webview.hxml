@@ -1,0 +1,11 @@
+# Showing a PDF compiles in no webview the program does not name (test/src/CompilesInNoWebView.hx).
+# StageWebView on the class path, as it is for any program using pdfview.
+-cp src
+-cp test/src
+-lib StageWebView
+-D pdfview_pdfjs
+--macro pdfview._internal.Embed.include()
+--macro CompilesInNoWebView.check()
+-main ShowOnly
+--cpp bin/no-webview
+--no-output

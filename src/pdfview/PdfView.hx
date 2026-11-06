@@ -6,7 +6,8 @@ import haxe.io.Bytes;
 import haxe.io.Path;
 
 /**
-	Shows a PDF in a StageWebView webview.
+	Shows a PDF in a webview: StageWebView's, Lime's, or anything with the two
+	calls `PdfTarget` names.
 
 	WebView2 and WKWebView display a PDF themselves, so on Windows, macOS and iOS
 	`show()` navigates to the file. Android WebView has no viewer, and WebKitGTK
@@ -56,12 +57,12 @@ class PdfView
 			#if sys
 			var html = page(sys.io.File.getBytes(path), Path.withoutDirectory(path));
 			#if (!android && !ios && (windows || pdfview_windows))
-			var file = __pages.get(target.view);
+			var file = __pages.get(target);
 			if (file == null)
 			{
 				var temp = Sys.getEnv("TEMP");
 				file = Path.join([temp != null ? temp : ".", "pdfview-" + Std.string(Date.now().getTime()) + "-" + Std.random(1000000) + ".html"]);
-				__pages.set(target.view, file);
+				__pages.set(target, file);
 			}
 
 			sys.io.File.saveContent(file, html);
@@ -85,13 +86,13 @@ class PdfView
 	**/
 	public static function release(target:PdfTarget):Void
 	{
-		var file = __pages.get(target.view);
+		var file = __pages.get(target);
 		if (file == null)
 		{
 			return;
 		}
 
-		__pages.remove(target.view);
+		__pages.remove(target);
 		#if sys
 		try
 		{
